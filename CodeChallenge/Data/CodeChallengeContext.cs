@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CodeChallenge.Models;
 using NuGet.Packaging;
+using EntityFramework.Exceptions.SqlServer;
 
 namespace CodeChallenge.Data
 {
@@ -21,6 +22,13 @@ namespace CodeChallenge.Data
         public DbSet<CodeChallenge.Models.Episode> Episodes { get; set; }
 
         public DbSet<CodeChallenge.Models.ActorTVShow> ActorTVShows { get; set; }
+
+        public DbSet<CodeChallenge.Models.User> Users { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseExceptionProcessor();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
