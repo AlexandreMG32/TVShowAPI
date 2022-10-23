@@ -33,7 +33,10 @@ namespace CodeChallenge.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TVShow>> GetTVShow(int id)
         {
-            var tVShow = await _context.TVShows.Include(x => x.Actors).Include(x => x.Episodes).FirstOrDefaultAsync(x => x.TVShowId == id);
+            var tVShow = await _context.TVShows
+                .Include(x => x.Actors)
+                .Include(x => x.Episodes)
+                .FirstAsync(x => x.TVShowId == id);
 
             if (tVShow == null)
             {

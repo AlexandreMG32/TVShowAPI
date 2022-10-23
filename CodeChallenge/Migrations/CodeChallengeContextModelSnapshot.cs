@@ -152,7 +152,12 @@ namespace CodeChallenge.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("TVShowId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TVShows");
 
@@ -235,7 +240,19 @@ namespace CodeChallenge.Migrations
 
             modelBuilder.Entity("CodeChallenge.Models.TVShow", b =>
                 {
+                    b.HasOne("CodeChallenge.Models.User", null)
+                        .WithMany("Favorites")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("CodeChallenge.Models.TVShow", b =>
+                {
                     b.Navigation("Episodes");
+                });
+
+            modelBuilder.Entity("CodeChallenge.Models.User", b =>
+                {
+                    b.Navigation("Favorites");
                 });
 #pragma warning restore 612, 618
         }

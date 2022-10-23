@@ -1,7 +1,9 @@
-﻿using CodeChallenge.Data;
+﻿using Azure.Core;
+using CodeChallenge.Data;
 using CodeChallenge.DTO;
 using CodeChallenge.Models;
 using EntityFramework.Exceptions.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +48,7 @@ namespace CodeChallenge.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            User user = await _context.Users.FirstAsync(x => x.Username == request.Username);
+            User user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.Username);
 
             if(user == null)
             {
@@ -59,6 +61,70 @@ namespace CodeChallenge.Controllers
             string token = CreateToken(user);
 
             return Ok(token);
+        }
+
+        [HttpPost("addFavoriteShow"), Authorize]
+        public async Task<ActionResult<TVShow>> AddTVShowToFavorites(int tvShowId)
+        {
+            string loggedUserName = User?.Identity?.Name;
+            User user = await _context.Users.FirstAsync(x => x.Username == loggedUserName);
+            var tVShow = await _context.TVShows
+                .Include(x => x.Actors)
+                .Include(x=> x.Episodes)
+                .FirstOrDefaultAsync(x => x.TVShowId == tvShowId);
+
+            if(tVShow == null)
+            {
+                return BadRequest("TVShow does not exist");
+            }
+
+            bool exists = user.Favorites.Contains(tVShow);
+
+            if(exists)
+            {
+                return BadRequest("TVShow already in favorites");
+            }
+            user.Favorites.Add(tVShow);
+            await _context.SaveChangesAsync();
+            return Ok(tVShow);
+        }
+
+        [HttpPost("removeFavoriteShow"), Authorize]
+        public async Task<ActionResult<TVShow>> RemoveTVShowFromFavorites(int tvShowId)
+        {
+            string loggedUserName = User?.Identity?.Name;
+            User user = await _context.Users.FirstAsync(x => x.Username == loggedUserName);
+            var tVShow = await _context.TVShows
+                .Include(x => x.Actors)
+                .Include(x => x.Episodes)
+                .FirstOrDefaultAsync(x => x.TVShowId == tvShowId);
+
+            if (tVShow == null)
+            {
+                return BadRequest("TVShow does not exist");
+            }
+
+            bool exists = user.Favorites.Contains(tVShow);
+
+            if(!exists)
+            {
+                return BadRequest("TVShow isnt on your favorites list");
+            }
+            user.Favorites.Remove(tVShow);
+            await _context.SaveChangesAsync();
+            return Ok(tVShow);
+        }
+
+        [HttpGet("favoriteShows"), Authorize]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetFavoriteTVShows()
+        {
+            string loggedUserName = User?.Identity?.Name;
+            User user = await _context.Users
+                .Include(x => x.Favorites).ThenInclude(x => x.Actors)
+                .Include(x => x.Favorites).ThenInclude(x => x.Episodes)
+                .FirstAsync(x => x.Username == loggedUserName);
+
+            return user.Favorites.ToList();
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
