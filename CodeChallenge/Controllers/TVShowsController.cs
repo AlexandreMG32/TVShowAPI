@@ -60,6 +60,19 @@ namespace CodeChallenge.Controllers
             return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).OrderBy(x => x.Genre).ToListAsync();
         }
 
+        [HttpGet("genre/{genre}")]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetTVShowsWithGenre(string genre)
+        {
+            try
+            {
+                return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).Where(x => x.Genre.ToLower().Equals(genre)).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         // POST: api/TVShows
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
