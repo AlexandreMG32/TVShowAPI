@@ -42,6 +42,37 @@ namespace CodeChallenge.Controllers
             return tVShow;
         }
 
+        [HttpGet("orderby/date")]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetTVShowsOrderByReleaseDate()
+        {
+            return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).OrderBy(x => x.ReleaseDate).ToListAsync();
+        }
+
+        [HttpGet("orderby/title")]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetTVShowsOrderByTitle()
+        {
+            return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).OrderBy(x => x.Title).ToListAsync();
+        }
+
+        [HttpGet("orderby/genre")]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetTVShowsOrderByGenre()
+        {
+            return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).OrderBy(x => x.Genre).ToListAsync();
+        }
+
+        [HttpGet("genre/{genre}")]
+        public async Task<ActionResult<IEnumerable<TVShow>>> GetTVShowsWithGenre(string genre)
+        {
+            try
+            {
+                return await _context.TVShows.Include(x => x.Episodes).Include(x => x.Actors).Where(x => x.Genre.ToLower().Equals(genre)).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+
         // POST: api/TVShows
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
