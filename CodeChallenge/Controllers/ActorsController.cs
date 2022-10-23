@@ -80,7 +80,13 @@ namespace CodeChallenge.Controllers
             {
                 return BadRequest();
             }
-            tvShow.Actors.Add(actor);
+
+            ActorTVShow relation = new ActorTVShow
+            {
+                ActorId = actorId,
+                TVShowId = tvShowId
+            };
+            _context.ActorTVShows.Add(relation);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetActor", new { id = actor.ActorId }, actor);
         }
