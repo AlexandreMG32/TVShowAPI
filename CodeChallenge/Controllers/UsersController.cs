@@ -89,6 +89,32 @@ namespace CodeChallenge.Controllers
             return Ok(tVShow);
         }
 
+        [HttpPost("removeFavoriteShow"), Authorize]
+        public async Task<ActionResult<TVShow>> RemoveTVShowFromFavorites(int tvShowId)
+        {
+            string loggedUserName = User?.Identity?.Name;
+            User user = await _context.Users.FirstAsync(x => x.Username == loggedUserName);
+            var tVShow = await _context.TVShows
+                .Include(x => x.Actors)
+                .Include(x => x.Episodes)
+                .FirstOrDefaultAsync(x => x.TVShowId == tvShowId);
+
+            if (tVShow == null)
+            {
+                return BadRequest("TVShow does not exist");
+            }
+
+            bool exists = user.Favorites.Contains(tVShow);
+
+            if(!exists)
+            {
+                return BadRequest("TVShow isnt on your favorites list");
+            }
+            user.Favorites.Remove(tVShow);
+            await _context.SaveChangesAsync();
+            return Ok(tVShow);
+        }
+
         [HttpGet("favoriteShows"), Authorize]
         public async Task<ActionResult<IEnumerable<TVShow>>> GetFavoriteTVShows()
         {
