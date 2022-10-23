@@ -13,6 +13,7 @@ namespace CodeChallenge.Models
         [JsonIgnore]
         public byte[] PasswordHash { get; set; }
         [JsonIgnore]
-        public byte[] PasswordSalt { get; set; }   
+        public byte[] PasswordSalt { get; set; }
+        public virtual ICollection<TVShow> Favorites { get; set; } = new List<TVShow>();
     }
 }

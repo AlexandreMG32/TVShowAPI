@@ -24,22 +24,6 @@ namespace CodeChallenge.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TVShows",
-                columns: table => new
-                {
-                    TVShowId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TVShows", x => x.TVShowId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -52,6 +36,28 @@ namespace CodeChallenge.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TVShows",
+                columns: table => new
+                {
+                    TVShowId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TVShows", x => x.TVShowId);
+                    table.ForeignKey(
+                        name: "FK_TVShows_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -111,11 +117,11 @@ namespace CodeChallenge.Migrations
 
             migrationBuilder.InsertData(
                 table: "TVShows",
-                columns: new[] { "TVShowId", "Description", "Genre", "ReleaseDate", "Title" },
+                columns: new[] { "TVShowId", "Description", "Genre", "ReleaseDate", "Title", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "A comedy show", "Comedy", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Friends" },
-                    { 2, "A small TV show", "Romance", new DateTime(1984, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Sopranos" }
+                    { 1, "A comedy show", "Comedy", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Friends", null },
+                    { 2, "A small TV show", "Romance", new DateTime(1984, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "The Sopranos", null }
                 });
 
             migrationBuilder.InsertData(
@@ -147,6 +153,11 @@ namespace CodeChallenge.Migrations
                 column: "TVShowId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TVShows_UserId",
+                table: "TVShows",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
                 table: "Users",
                 column: "Username",
@@ -162,13 +173,13 @@ namespace CodeChallenge.Migrations
                 name: "Episodes");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Actors");
 
             migrationBuilder.DropTable(
                 name: "TVShows");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
