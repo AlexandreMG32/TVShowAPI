@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CodeChallenge.Migrations
 {
     [DbContext(typeof(CodeChallengeContext))]
-    [Migration("20221022153858_initial")]
+    [Migration("20221023165107_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,6 +175,34 @@ namespace CodeChallenge.Migrations
                             ReleaseDate = new DateTime(1984, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "The Sopranos"
                         });
+                });
+
+            modelBuilder.Entity("CodeChallenge.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CodeChallenge.Models.ActorTVShow", b =>

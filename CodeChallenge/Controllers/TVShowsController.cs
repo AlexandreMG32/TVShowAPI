@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CodeChallenge.Data;
 using CodeChallenge.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CodeChallenge.Controllers
 {
