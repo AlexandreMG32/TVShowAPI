@@ -56,9 +56,9 @@ namespace CodeChallenge.Controllers
             {
                 return BadRequest("Wrong password");
             }
-            CreateToken(user);
+            string token = CreateToken(user);
 
-            return Ok("Token here");
+            return Ok(token);
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
