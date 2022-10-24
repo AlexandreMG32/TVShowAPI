@@ -7,14 +7,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using CodeChallenge.Worker;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CodeChallengeContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CodeChallengeContext") ?? throw new InvalidOperationException("Connection string 'CodeChallengeContext' not found.")));
 
 // Add services to the container.
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
+builder.Services.AddHostedService<BackgroundWorkerService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c=>
