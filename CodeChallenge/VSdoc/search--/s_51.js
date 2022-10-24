@@ -1,0 +1,1 @@
+search_result['51']=["topic_0000000000000019.html","UsersController Constructor","Constructor for the user controller, getting the injected context\r\nof the entity framework and the configuration for later getting the\r\ntoken from appsettings"];

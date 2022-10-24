@@ -1,0 +1,1 @@
+c['34']=[['35',"UsersController Constructor","topic_0000000000000019.html",0],['36',"Methods","topic_0000000000000018_methods--.html",1]];

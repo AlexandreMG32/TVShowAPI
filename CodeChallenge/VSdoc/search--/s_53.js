@@ -1,0 +1,1 @@
+search_result['53']=["topic_000000000000001B.html","UsersController.Login Method","Logins a user, checking if it exists in the database and\r\nchecking if the passwords match\r\nGenerates a token for further having permissions\r\nto add favorites to his profile"];

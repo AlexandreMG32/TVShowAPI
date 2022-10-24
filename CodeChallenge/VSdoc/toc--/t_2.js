@@ -1,0 +1,1 @@
+c['2']=[['4',"CodeChallenge.Controllers Namespace","topic_0000000000000000.html",1],['42',"CodeChallenge.DTO Namespace","topic_0000000000000029.html",1],['47',"CodeChallenge.Data Namespace","topic_000000000000001F.html",1],['59',"CodeChallenge.Migrations Namespace","topic_000000000000002D.html",1],['65',"CodeChallenge.Models Namespace","topic_0000000000000032.html",1]];
