@@ -42,7 +42,7 @@ namespace CodeChallenge.Worker
                     GetFieldsForTVShowModel(JObject.Parse(jsonResponse));
                 }
             }
-            catch (ArgumentException e) { Console.WriteLine("ERRO DO GETTER" + e.Message); }
+            catch (ArgumentException e) { Console.WriteLine(e.Message); }
         }
 
         private async void GetFieldsForTVShowModel(JObject tvShow)
@@ -69,7 +69,7 @@ namespace CodeChallenge.Worker
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERRO DOS FIELDS" + e.Message);
+                Console.WriteLine(e.Message);
             }
 
         }
@@ -89,7 +89,7 @@ namespace CodeChallenge.Worker
                 CancellationTokenSource token = new CancellationTokenSource(2000);
                 var response = await client.PostAsJsonAsync("api/TVShows", tVShow, token.Token);
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("RESPOSTA DO ADDTODATABASE" + response.Content.ToString());
+                Console.WriteLine(response.Content.ToString());
             }
             catch(Exception e)
             {
