@@ -10,6 +10,11 @@
 > First, clone this project, using git.
 > Second, make sure you have .NET SDK and SqlServer installed
 > Third, open a bash/cmd on the folder CodeChallenge, of the project
+> Update the database with the migration given
+> ```
+> dotnet ef database update
+> ```
+> Next, run the project
 > ```
 > dotnet run
 > ```
