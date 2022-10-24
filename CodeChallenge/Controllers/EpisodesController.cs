@@ -10,6 +10,9 @@ using CodeChallenge.Models;
 
 namespace CodeChallenge.Controllers
 {
+    /// <summary>
+    /// Controller to get, add and remove episodes from the DB
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class EpisodesController : ControllerBase
@@ -21,14 +24,22 @@ namespace CodeChallenge.Controllers
             _context = context;
         }
 
-        // GET: api/Episodes
+        /// <summary>
+        /// Gets all episodes in the db
+        /// </summary>
+        /// <returns>List with all the episodes in the db</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Episode>>> GetEpisode()
         {
             return await _context.Episodes.Include(x => x.TVShow).ToListAsync();
         }
 
-        // GET: api/Episodes/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">id of the episode to get</param>
+        /// <returns>Episode with the id passed or null if 
+        /// there isn't one with that id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Episode>> GetEpisode(int id)
         {
@@ -42,8 +53,11 @@ namespace CodeChallenge.Controllers
             return episode;
         }
 
-        // POST: api/Episodes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Adds new episode to the db
+        /// </summary>
+        /// <param name="episode"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
         {
@@ -53,7 +67,12 @@ namespace CodeChallenge.Controllers
             return CreatedAtAction("GetEpisode", new { id = episode.EpisodeId }, episode);
         }
 
-        // DELETE: api/Episodes/5
+        /// <summary>
+        /// Deletes episode with the id passed 
+        /// as param, from db 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEpisode(int id)
         {

@@ -22,12 +22,25 @@ namespace CodeChallenge.Controllers
         private readonly CodeChallengeContext _context;
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Constructor for the user controller, getting the injected context
+        /// of the entity framework and the configuration for later getting the 
+        /// token from appsettings
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="configuration"></param>
         public UsersController(CodeChallengeContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Registers an user given the user data transfer object
+        /// and saves it in the database
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {
@@ -45,6 +58,14 @@ namespace CodeChallenge.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Logins a user, checking if it exists in the database and
+        /// checking if the passwords match
+        /// Generates a token for further having permissions 
+        /// to add favorites to his profile
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
@@ -63,6 +84,12 @@ namespace CodeChallenge.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// Adds a show to the list of favorite shows of the user
+        /// given the tvShowId
+        /// </summary>
+        /// <param name="tvShowId"></param>
+        /// <returns></returns>
         [HttpPost("addFavoriteShow"), Authorize]
         public async Task<ActionResult<TVShow>> AddTVShowToFavorites(int tvShowId)
         {
@@ -88,7 +115,13 @@ namespace CodeChallenge.Controllers
             await _context.SaveChangesAsync();
             return Ok(tVShow);
         }
-
+        
+        /// <summary>
+        /// Removes a tv show from the user list of 
+        /// favorite shows, given the tv show id
+        /// </summary>
+        /// <param name="tvShowId"></param>
+        /// <returns></returns>
         [HttpPost("removeFavoriteShow"), Authorize]
         public async Task<ActionResult<TVShow>> RemoveTVShowFromFavorites(int tvShowId)
         {
@@ -115,6 +148,10 @@ namespace CodeChallenge.Controllers
             return Ok(tVShow);
         }
 
+        /// <summary>
+        /// Gets the list of favorites shows of the logged in user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("favoriteShows"), Authorize]
         public async Task<ActionResult<IEnumerable<TVShow>>> GetFavoriteTVShows()
         {
@@ -127,6 +164,13 @@ namespace CodeChallenge.Controllers
             return user.Favorites.ToList();
         }
 
+        /// <summary>
+        /// Creates a password hash and salt given the password passed 
+        /// previously by the user
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using(var hmac = new HMACSHA512())
@@ -136,6 +180,14 @@ namespace CodeChallenge.Controllers
             }
         }
 
+        /// <summary>
+        /// Checks if the password typed by the user 
+        /// is the same as the one on the database
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
+        /// <returns></returns>
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using(var hmac = new HMACSHA512(passwordSalt))
@@ -145,7 +197,13 @@ namespace CodeChallenge.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Creates a token that will be given to the user
+        /// after the login, to give him permissions to 
+        /// add and remove tvshows from his list of favorite ones
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>

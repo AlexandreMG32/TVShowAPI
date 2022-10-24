@@ -16,6 +16,11 @@ namespace CodeChallenge.Controllers
     {
         private readonly CodeChallengeContext _context;
 
+        /// <summary>
+        /// Context of the database, using the entity framework, injected 
+        /// in the constructor
+        /// </summary>
+        /// <param name="context"></param>
         public ActorsController(CodeChallengeContext context)
         {
             _context = context;
@@ -28,7 +33,11 @@ namespace CodeChallenge.Controllers
             return await _context.Actors.Include(x => x.TVShows).ToListAsync();
         }
 
-        // GET: api/Actors/5
+        /// <summary>
+        /// Gets an actor given the id of it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Actor>> GetActor(int id)
         {
@@ -42,8 +51,11 @@ namespace CodeChallenge.Controllers
             return actor;
         }
 
-        // POST: api/Actors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Adds a new actor to the database, inputed from the user
+        /// </summary>
+        /// <param name="actor"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Actor>> PostActor(Actor actor)
         {
@@ -53,7 +65,11 @@ namespace CodeChallenge.Controllers
             return CreatedAtAction("GetActor", new { id = actor.ActorId }, actor);
         }
 
-        // DELETE: api/Actors/5
+        /// <summary>
+        /// Deletes user given the id of it
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActor(int id)
         {
@@ -69,6 +85,14 @@ namespace CodeChallenge.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Adds an actor to a show, given the id of the actor
+        /// and the show and uses the generated table for the relation
+        /// to save it in the DB
+        /// </summary>
+        /// <param name="actorId"></param>
+        /// <param name="tvShowId"></param>
+        /// <returns></returns>
         [HttpPost("{actorId}/addToShow/{tvShowId}")]
         public async Task<ActionResult<Actor>> AddActorToShow(int actorId, int tvShowId)
         {

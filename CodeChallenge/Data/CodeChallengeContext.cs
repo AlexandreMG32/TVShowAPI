@@ -9,6 +9,9 @@ using EntityFramework.Exceptions.SqlServer;
 
 namespace CodeChallenge.Data
 {
+    /// <summary>
+    /// Class with the context that is gonna make the connection with the DB using the entity framework
+    /// </summary>
     public class CodeChallengeContext : DbContext
     {
         public CodeChallengeContext (DbContextOptions<CodeChallengeContext> options)
@@ -25,11 +28,19 @@ namespace CodeChallenge.Data
 
         public DbSet<CodeChallenge.Models.User> Users { get; set; }
 
+        /// <summary>
+        /// Added because of the username unique key in the user model
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseExceptionProcessor();
         }
 
+        /// <summary>
+        /// Method that is gonna populate the DB when the migration is applyed
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             List<Actor> actors = new List<Actor>();
@@ -90,6 +101,7 @@ namespace CodeChallenge.Data
                 episodes
             );
 
+            //Creating an entity for the relation between actor and tvshow (many-to-many)
             modelBuilder.Entity<Actor>()
                 .HasMany(left => left.TVShows)
                 .WithMany(right => right.Actors)
