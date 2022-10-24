@@ -1,0 +1,1 @@
+search_result['52']=["topic_000000000000001A.html","UsersController.Register Method","Registers an user given the user data transfer object\r\nand saves it in the database"];

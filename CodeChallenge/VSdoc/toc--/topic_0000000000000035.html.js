@@ -1,0 +1,1 @@
+var breadcrumbs=[['-1',"",""],['2',"CodeChallenge Reference","topic_0000000000000052.html"],['65',"CodeChallenge.Models Namespace","topic_0000000000000032.html"],['66',"Actor Class","topic_0000000000000033.html"],['67',"Properties","topic_0000000000000033_props--.html"],['70',"Name Property","topic_0000000000000035.html"]];

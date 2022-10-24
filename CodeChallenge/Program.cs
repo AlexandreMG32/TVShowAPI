@@ -31,6 +31,8 @@ builder.Services.AddSwaggerGen(c=>
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+// Add authentication using a JWT bearer and the token key specified ion the launchSettings file
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
